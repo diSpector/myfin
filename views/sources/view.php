@@ -8,6 +8,7 @@ use yii\grid\GridView;
 <div class="row">
     <div class="col-md-offset-2 col-md-8">
         <h1>Ваши источники (карты и кошельки)</h1>
+      <?php if ($dataProvider->getTotalCount() !== 0): ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
@@ -54,6 +55,10 @@ use yii\grid\GridView;
                 ],
             ]
         ]); ?>
+
+      <?php else: ?>
+        <h4>Источников пока нет</h4>
+      <?php endif; ?>
         <?= Html::a('Добавить', ['/sources/create/'], ['class' => 'btn btn-primary']); ?>
         <br>
         <br>

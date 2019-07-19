@@ -2,6 +2,7 @@
 
 namespace app\controllers\actions\operation;
 
+use app\components\OperationComponent;
 use Yii;
 use yii\base\Action;
 
@@ -9,6 +10,7 @@ class ViewOperationAction extends Action
 {
     public function run()
     {
+      /** @var OperationComponent $comp */
         $comp = Yii::$app->operation;
         $userId = Yii::$app->user->id;
         $filterModel = $comp->getOperationSearch();

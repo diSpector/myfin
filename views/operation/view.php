@@ -10,7 +10,7 @@ use app\models\OperationType;
 
 <div class="row">
 
-    <?php if (!$dataProvider->getCount() === 0) :  ?>
+    <?php if ($dataProvider->getCount() !== 0) :  ?>
         <div class="col-md-12">
             <h1>Операции</h1>
             <?= GridView::widget([

@@ -2,6 +2,7 @@
 
 namespace app\controllers\actions\operation;
 
+use app\components\OperationComponent;
 use Yii;
 use yii\base\Action;
 use yii\web\Response;
@@ -11,17 +12,15 @@ class CreateOperationTestAction extends Action
   public function run()
   {
     // изначально не выбран тип операции (приход/расход), поэтому поле с категориями не показывается
+    /** @var OperationComponent $comp */
     $comp = Yii::$app->operation;
     $userId = Yii::$app->user->id;
-    $types = $comp->getOperationTypes();
-//     var_dump($types);
-
-//    $types = $comp->getOperationTypesForUser($userId);
-    // var_dump($types);
+//    $types = $comp->getOperationTypes();
+    $types = $comp->getOperationTypesForUser($userId);
 
     $model = $comp->getModel();
 
-    // $categories = $comp->getSearchProvider($userId, Yii::$app->request->get());
+//     $categories = $comp->getSearchProvider($userId, Yii::$app->request->get());
 
     // определяем видимость виджета
     $categories = $comp->getUserCategories($userId);
@@ -42,8 +41,7 @@ class CreateOperationTestAction extends Action
 
       // получить все типы операций, а также категории и источники пользователя
 //      $types = $comp->getOperationTypes();
-//            $types = $comp->getOperationTypesForUser($userId);
-//      var_dump($types);
+            $types = $comp->getOperationTypesForUser($userId);
 
       $categories = $comp->getUserCategories($userId, ['id' => $selectedType]);
       $sources = $comp->getUserSources($userId);

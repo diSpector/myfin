@@ -21,9 +21,9 @@ $(document).ready(function () {
             dataType: 'html',
             data: operation,
             cache: false,
-            // beforeSend: function(){
-            //     $("#signup_wrap").html("<img src='/img/ajax-loader.gif' />");
-            // },
+            beforeSend: function(){
+                $("#operation_info").html("<div class = 'loading'><img src='/img/load.gif' /></div>").show();
+            },
             success: function (data) {
                 // newData = JSON.parse(data)
                 // console.log(newData)

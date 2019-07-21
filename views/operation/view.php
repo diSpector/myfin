@@ -13,6 +13,7 @@ use app\models\OperationType;
     <?php if ($dataProvider->getCount() !== 0) :  ?>
         <div class="col-md-12">
             <h1>Операции</h1>
+            <?= Html::a('Сбросить фильтры', '/operation/view'); ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $filterModel,
@@ -44,13 +45,13 @@ use app\models\OperationType;
                         }
 
                     ],
-                    [
-                        'attribute' => 'operation_type',
-                        'filter' => ArrayHelper::map(OperationType::find()->asArray()->all(), 'id', 'name'),
-                        'value' => function ($data) {
-                            return $data->source->type == 1 ? 'Безналичный' : 'Наличный';
-                        }
-                    ],
+//                    [
+//                        'attribute' => 'operation_type',
+//                        'filter' => ArrayHelper::map(OperationType::find()->asArray()->all(), 'id', 'name'),
+//                        'value' => function ($data) {
+//                            return $data->source->type == 1 ? 'Безналичный' : 'Наличный';
+//                        }
+//                    ],
                     [
                         'attribute' => 'type',
                         'contentOptions' => function ($data, $key, $index, $column) {
@@ -105,6 +106,10 @@ use app\models\OperationType;
             <div class="col-md-offset-2 col-md-8">
                 <h1>Операции</h1>
                 <h4>Операций нет</h4>
+              <?php if (Yii::$app->request->queryParams): ?>
+                <?= Html::a('Сбросить фильтры', '/operation/view'); ?>
+                <br>
+              <?php endif; ?>
             <?php endif; ?>
             <?= Html::a('Добавить', ['/operation/create/'], ['class' => 'btn btn-primary']); ?>
             <br>

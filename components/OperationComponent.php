@@ -179,4 +179,29 @@ class OperationComponent extends Component
             'date_picked'
         );
     }
+
+    public function getOperations($userId, $from, $count = 10)
+    {
+        return
+            Operation::find()
+            ->select(['operations.id id', 'operations.name name', 'operations.sum sum', 'operations.type type', 'operations.date_picked', 'c.name cname', 's.name sname'])
+            ->where(['operations.user_id' => $userId])
+            ->joinWith('category c')
+            ->joinWith('source s')
+            ->orderBy('date_picked desc')
+            ->limit($count)
+            ->offset($from)
+            ->asArray()
+            ->all();
+    }
+
+    public function howManyOperations($arr)
+    {
+        return count($arr);
+    }
+
+    public function reIndexOperations($arr)
+    {
+        return ArrayHelper::index($arr, null, 'date_picked');
+    }
 }

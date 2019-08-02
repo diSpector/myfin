@@ -28,9 +28,11 @@ use app\widgets\OperationByDayWidget\OperationByDayWidget;
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <div class="buttons-load-more text-center">
-            <?= Html::tag('p', 'Загрузить еще', ['class' => 'btn btn-success', 'data-offset' => $offset, 'data-count' => $count]) ?>
-        </div>
+        <?php if ($more) : ?>
+            <div class="buttons-load-more text-center">
+                <?= Html::tag('p', 'Загрузить еще', ['class' => 'btn btn-success', 'data-offset' => $offset, 'data-count' => $count]) ?>
+            </div>
+        <?php endif; ?>
         <br>
         <br>
         <div class="buttons-area-bottom text-center">

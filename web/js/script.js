@@ -47,7 +47,6 @@ $(document).ready(function () {
 
     // обработка клика на строку в таблице операций
     $(".table-row").click(function () {
-        console.log('Click');
         window.document.location = $(this).data("href");
     });
 
@@ -55,20 +54,23 @@ $(document).ready(function () {
     $('.buttons-load-more .btn').click(function (event) {
         // newStopDate = event.target.dataset.date;
         // newStartDate = getNewStartDate(newStopDate);
+        var offset = Number($('.btn-success').attr('data-offset'));
+        var count = Number($('.btn-success').attr('data-count'));
+        // $('.buttons-load-more .btn').remove();
 
-        var offset = $('.btn-success').attr('data-offset');
-        var count = $('.btn-success').attr('data-count');
-
-        console.log(offset);
-        console.log(count);
 
         $.ajax({
             url: '/operation/view',
             type: 'post',
             dataType: 'html',
+            // data: {
+            //     newStopDate: newStopDate,
+            //     newStartDate: newStartDate
+            // },
+
             data: {
-                newStopDate: newStopDate,
-                newStartDate: newStartDate
+                offset: offset,
+                count: count
             },
 
             cache: false,
@@ -78,7 +80,12 @@ $(document).ready(function () {
             success: function (data) {
                 $('.loading').hide();
                 $('.operations-area').append(data);
-                $('.btn-success').attr('data-date', newStartDate)
+                // $('.btn-success').attr('data-date', newStartDate)
+                // $('.buttons-load-more').append('<p class = "btn btn-success">Загрузить еще</p>')
+                // $('.btn-success').attr('data-offset', offset + count)
+                // $('.btn-success').attr('data-count', count)
+
+
             },
         });
 

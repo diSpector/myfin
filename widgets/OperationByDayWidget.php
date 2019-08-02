@@ -21,22 +21,6 @@ class OperationByDayWidget extends Widget
     {
         echo $this->model[0]['date_picked'];
         Html::beginTag('table');
-        <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
         foreach ($this->model as $model => $value) {
 
                 echo $value['id'] . '<br>';

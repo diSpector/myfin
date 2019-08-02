@@ -16,11 +16,11 @@ class OperationController extends BaseController
     public function actions()
     {
         return [
-            // 'create' => CreateOperationAction::class,
             'create' => CreateOperationTestAction::class,
-            // 'view' => ViewOperationAction::class,
             'view' => ViewOperationTestAction::class,
             'update' => UpdateOperationAction::class,
+            // 'create' => CreateOperationAction::class,
+            // 'view' => ViewOperationAction::class,
             // 'delete' => DeleteOperationAction::class,
         ];
     }

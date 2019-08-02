@@ -15,12 +15,12 @@ class CreateOperationTestAction extends Action
     /** @var OperationComponent $comp */
     $comp = Yii::$app->operation;
     $userId = Yii::$app->user->id;
-//    $types = $comp->getOperationTypes();
+    //    $types = $comp->getOperationTypes();
     $types = $comp->getOperationTypesForUser($userId);
 
     $model = $comp->getModel();
 
-//     $categories = $comp->getSearchProvider($userId, Yii::$app->request->get());
+    //     $categories = $comp->getSearchProvider($userId, Yii::$app->request->get());
 
     // определяем видимость виджета
     $categories = $comp->getUserCategories($userId);
@@ -40,8 +40,8 @@ class CreateOperationTestAction extends Action
       }
 
       // получить все типы операций, а также категории и источники пользователя
-//      $types = $comp->getOperationTypes();
-            $types = $comp->getOperationTypesForUser($userId);
+      // $types = $comp->getOperationTypes();
+      $types = $comp->getOperationTypesForUser($userId);
 
       $categories = $comp->getUserCategories($userId, ['id' => $selectedType]);
       $sources = $comp->getUserSources($userId);
@@ -54,10 +54,10 @@ class CreateOperationTestAction extends Action
       // $operations = $comp->getSearchProvider($userId, Yii::$app->request->post());
 
       return $this->controller->renderAjax('_form', [
-          'model' => $model,
-          'selectedType' => $selectedType,
-          'categories' => $categories,
-          'sources' => $sources,
+        'model' => $model,
+        'selectedType' => $selectedType,
+        'categories' => $categories,
+        'sources' => $sources,
         // 'dateToday' => $dateToday,
       ]);
     }
@@ -72,8 +72,8 @@ class CreateOperationTestAction extends Action
     }
 
     return $this->controller->render('create_test', [
-        'types' => $types,
-        'isVisible' => $isVisible,
+      'types' => $types,
+      'isVisible' => $isVisible,
     ]);
   }
 }

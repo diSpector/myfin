@@ -10,9 +10,12 @@ use app\models\OperationType;
 
 <div class="row">
 
-    <?php if ($dataProvider->getCount() !== 0) :  ?>
+    <?php if ($dataProvider->getTotalCount() !== 0) :  ?>
         <div class="col-md-12">
             <h1>Операции</h1>
+
+            <?php // var_dump($dates); ?>
+
             <?= Html::a('Сбросить фильтры', '/operation/view'); ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
@@ -20,6 +23,17 @@ use app\models\OperationType;
                 // 'showOnEmpty' => false,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
+                    [
+                        'label' => 'Дата',
+                        'attribute' => 'date_picked',
+                        'value' => function($model){
+                            $dateTime = new DateTime($model->date_picked);
+                            return $dateTime->format('d-m-Y');
+                            // return date('Y:m:d', $model->date_picked);
+                            // return $model->date_picked;
+
+                        }
+                    ],
                     [
                         'label' => 'Сумма',
                         'attribute' => 'sum'

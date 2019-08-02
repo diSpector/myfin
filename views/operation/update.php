@@ -34,6 +34,18 @@ use yii\widgets\ActiveForm;
         ]); ?>
         <div class="col-lg-12">
             <?= Html::submitButton('Изменить', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton(
+                'Удалить',
+                [
+                    'class' => 'btn btn-danger',
+                    'name' => 'button',
+                    'value' => 'delete',
+                    'data' => [
+                        'confirm' => 'Вы уверены, что хотите удалить операцию?'
+                    ]
+                ]
+            ) ?>
+
         </div>
         <?php $form->end(); ?>
         <br>

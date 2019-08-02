@@ -1,0 +1,12 @@
+.consumption{
+    color: red;
+}
+
+.income{
+    color: green;
+}
+
+
+.table-row{
+    cursor:pointer;
+    }

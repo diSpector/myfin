@@ -44,4 +44,10 @@ $(document).ready(function () {
             },
         });
     });
+
+    // обработка клика на строку в таблице операций
+    $(".table-row").click(function() {
+        console.log('Click');
+        window.document.location = $(this).data("href");
+    });
 });

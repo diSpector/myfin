@@ -33,7 +33,7 @@ class OperationSearch extends Operation
       // сортировка по умолчанию
         'sort' => [
             'defaultOrder' => [
-                'type' => SORT_ASC
+                'date_picked' => SORT_DESC
             ]
         ]
     ]);

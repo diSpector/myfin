@@ -11,7 +11,7 @@ use yii\helpers\Json;
 class ViewOperationTestAction extends Action
 {
     const OFFSET = 0;
-    const COUNT = 5;
+    const COUNT = 10;
 
     public function run()
     {
@@ -20,6 +20,8 @@ class ViewOperationTestAction extends Action
         $userId = Yii::$app->user->id;
 
         $balance = $comp->getTotalBalance($userId);
+        // var_dump($balance);
+        // exit();
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();

@@ -219,8 +219,11 @@ class OperationComponent extends Component
         // ->one();
 
         // SELECT source_id, sum(CASE when type=1 THEN -sum else sum end) FROM `operations` where user_id=15 GROUP BY `source_id`
+
+        // если по источникам не было операций, сейчас баланс по ним не выводится. TODO - сделать, чтобы выводился баланс по ВСЕМ операциям
+        // SELECT o.source_id, (total + sum(CASE when o.type=1 THEN -sum else sum end)) afterinit, total FROM operations o INNER JOIN sources s on o.source_id = s.id where o.user_id=17 GROUP BY `source_id`
         return Operation::find()
-        ->select(['operations.source_id', 's.name', 'sum(CASE when operations.type=1 THEN -sum else sum end) sum'])
+        ->select(['operations.source_id', 's.name', 'sum(CASE when operations.type=1 THEN -sum else sum end) sum', 's.total'])
         ->where(['operations.user_id' => $userId])
         ->joinWith('source s')
         ->groupBy('source_id')

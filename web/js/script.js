@@ -46,7 +46,7 @@ $(document).ready(function () {
     });
 
     // обработка клика на строку в таблице операций
-    $(".table-row").click(function () {
+    $('.operations-area').on('click', '.table-row', function () {
         window.document.location = $(this).data("href");
     });
 
@@ -59,7 +59,7 @@ $(document).ready(function () {
         var total = Number(attrs.attr('data-total'));
         var count = Number(attrs.attr('data-count'));
 
-        if(total < offset + count){
+        if(total <= offset + count){
             $('.buttons-load-more').hide();
         }
 

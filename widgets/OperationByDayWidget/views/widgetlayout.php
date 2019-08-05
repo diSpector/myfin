@@ -10,7 +10,7 @@ $formatDate = DateHelper::formatDate($date);
 ?>
 
 <h3 class="text-center"><?= $formatDate ?></h3>
-<table class="table table-striped table-bordered table-hover">
+<table class="table table-striped table-bordered table-hover ">
     <tbody>
         <?php foreach ($models as $model => $value) : ?>
 
@@ -18,8 +18,8 @@ $formatDate = DateHelper::formatDate($date);
             <?php $style = ($value['type'] === '1') ? 'consumption' : 'income' ?>
 
             <tr class = "table-row" data-href="/operation/update/<?= $value['id'] ?>">
-                    <td class="col-md-2 <?= $style ?>"><?=  $sign . $value['sum'] ?></td>
-                    <td class="col-md-2 text-right"><?= $value['name'] ?></td>
+                    <td class="col-md-6 <?= $style ?>"><?=  $sign . $value['sum'] ?></td>
+                    <td class="col-md-6 text-right"><?= $value['name'] ?></td>
             </tr>
 
         <?php endforeach;  ?>

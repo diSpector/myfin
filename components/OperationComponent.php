@@ -180,7 +180,8 @@ class OperationComponent extends Component
         );
     }
 
-    public function getOperations($userId, $from, $count = 10)
+    // получить $count последних операций пользователя, начиная с $from 
+    public function getOperations($userId, $from = '', $count = '')
     {
         return
             Operation::find()
@@ -195,11 +196,13 @@ class OperationComponent extends Component
             ->all();
     }
 
+    // посчитать количество операций
     public function howManyOperations($arr)
     {
         return count($arr);
     }
 
+    // переиндексировать массив операций по числам - 'число1' => ['операция 1' => 'данные операции 1', ...], ...
     public function reIndexOperations($arr)
     {
         return ArrayHelper::index($arr, null, 'date_picked');

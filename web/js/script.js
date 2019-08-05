@@ -52,25 +52,23 @@ $(document).ready(function () {
 
     // обработка нажатия на кнопку "Загрузить еще" (операции)
     $('.buttons-load-more .btn').click(function (event) {
-        // newStopDate = event.target.dataset.date;
-        // newStartDate = getNewStartDate(newStopDate);
-        var offset = Number($('.btn-success').attr('data-offset'));
-        var count = Number($('.btn-success').attr('data-count'));
-        // $('.buttons-load-more .btn').remove();
 
+        var attrs = $(".buttons-load-more input[name = 'attrs']");
+
+        var offset = Number(attrs.attr('data-offset'));
+        var total = Number(attrs.attr('data-total'));
+        var count = Number(attrs.attr('data-count'));
+
+        if(total < offset + count){
+            $('.buttons-load-more').hide();
+        }
 
         $.ajax({
             url: '/operation/view',
             type: 'post',
             dataType: 'html',
-            // data: {
-            //     newStopDate: newStopDate,
-            //     newStartDate: newStartDate
-            // },
-
             data: {
                 offset: offset,
-                count: count
             },
 
             cache: false,
@@ -80,35 +78,8 @@ $(document).ready(function () {
             success: function (data) {
                 $('.loading').hide();
                 $('.operations-area').append(data);
-                // $('.btn-success').attr('data-date', newStartDate)
-                // $('.buttons-load-more').append('<p class = "btn btn-success">Загрузить еще</p>')
-                // $('.btn-success').attr('data-offset', offset + count)
-                // $('.btn-success').attr('data-count', count)
-
-
+                attrs.attr('data-offset', offset + count);
             },
         });
-
-        // function getNewStartDate(stopDate){
-        //     splitDate = stopDate.split('-');
-        //     year = splitDate[0];
-        //     month = splitDate[1];
-        //     date = splitDate[2];
-    
-        //     prevYear = year;
-        //     prevMonth = month - 1;
-    
-        //     if (prevMonth == 0){
-        //         prevMonth = 12;
-        //         prevYear = prevYear-1;
-        //     } 
-    
-        //     if (prevMonth < 10){
-        //         prevMonth = '0' + prevMonth;
-        //     }
-    
-        //     return newStartDate = [prevYear, prevMonth, date].join('-');
-        // }
-
     });
 });

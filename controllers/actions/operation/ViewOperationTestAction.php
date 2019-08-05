@@ -10,58 +10,41 @@ use yii\helpers\Json;
 
 class ViewOperationTestAction extends Action
 {
+    const OFFSET = 0;
+    const COUNT = 5;
+
     public function run()
     {
         /** @var OperationComponent $comp */
         $comp = Yii::$app->operation;
         $userId = Yii::$app->user->id;
 
-        // вывод под датам уже не используется
-        // $tillDate = date('Y-m-d', strtotime(date('Y-m-d') . " -1 month"));
-        // $toDate = date('Y-m-d');
-        $more = true;
-        $offset = 0;
-        $count = 3;
-        // $operations = $comp->getAllOperationsForUser($userId, $tillDate, $toDate);
-        $operations = $comp->getOperations($userId, $offset, $count);
-        $indexedOperations = $comp->reIndexOperations($operations);
-        $howManyOperations = $comp->howManyOperations($operations);
-        if ($howManyOperations < $count) {
-            $more = false;
-        }
-        // $operations = $comp->getLastOperations($userId, $offset, $count);
-
-
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
-            // $newTillDate = $data['newStartDate'];
-            // $newToDate = $data['newStopDate'];
             $offset = $data['offset'];
-            $count = $data['count'];
-            // $operations = $comp->getAllOperationsForUser($userId, $newTillDate, $newToDate);
-            // $operations = $comp->getLastOperations($userId, $offset, $count);
 
-            $operations = $comp->getOperations($userId, $offset, $count);
-            $indexedOperations = $comp->reIndexOperations($operations);
-            $howManyOperations = $comp->howManyOperations($operations);
-
-            if ($howManyOperations < $count) {
-                $more = false;
-            }
+            $operations = $comp->getOperations($userId, $offset, self::COUNT);
+            $operationsForView = $comp->reIndexOperations($operations);
 
             return $this->controller->renderAjax('_loaded-data', [
-                'operationsByDate' => $indexedOperations,
-                'offset' => $offset + $count,
-                'count' => $count,
-                'more' => $more
+                'operations' => $operationsForView,
+                'offset' => $offset + self::COUNT,
+                'count' => self::COUNT,
             ]);
         }
 
+        // общее число операций пользователя - записывается в hiddenInput
+        $totalOperations = $comp->howManyOperations($comp->getOperations($userId));
+
+        // первичная инициализация 
+        $operations = $comp->getOperations($userId, self::OFFSET, self::COUNT);
+        $operationsForView = $comp->reIndexOperations($operations);
+
         return $this->controller->render('view_test', [
-            'operationsByDate' => $indexedOperations,
-            'offset' => $offset + $count,
-            'count' => $count,
-            'more' => $more
+            'operations' => $operationsForView,
+            'newOffset' => self::OFFSET + self::COUNT,
+            'count' => self::COUNT,
+            'totalOperations' => $totalOperations,
         ]);
     }
 }

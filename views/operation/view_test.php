@@ -16,8 +16,8 @@ use app\widgets\OperationByDayWidget\OperationByDayWidget;
             <?= Html::a('Добавить', ['/operation/create/'], ['class' => 'btn btn-primary']); ?>
         </div>
         <div class="operations-area">
-            <?php if (count($operationsByDate) !== 0) :  ?>
-                <?php foreach ($operationsByDate as $operation) : ?>
+            <?php if (count($operations) !== 0) :  ?>
+                <?php foreach ($operations as $operation) : ?>
                     <?= OperationByDayWidget::widget(['model' => $operation]) ?>
                 <?php endforeach; ?>
             <?php else : ?>
@@ -28,9 +28,10 @@ use app\widgets\OperationByDayWidget\OperationByDayWidget;
                 <?php endif; ?>
             <?php endif; ?>
         </div>
-        <?php if ($more) : ?>
+        <?php if ($newOffset < $totalOperations) : ?>
             <div class="buttons-load-more text-center">
-                <?= Html::tag('p', 'Загрузить еще', ['class' => 'btn btn-success', 'data-offset' => $offset, 'data-count' => $count]) ?>
+                <?= Html::tag('p', 'Загрузить еще', ['class' => 'btn btn-success']) ?>
+                <?= Html::hiddenInput('attrs', '', ['data-count' => $count, 'data-total' => $totalOperations, 'data-offset' => $newOffset]); ?>
             </div>
         <?php endif; ?>
         <br>

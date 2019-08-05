@@ -19,6 +19,8 @@ class ViewOperationTestAction extends Action
         $comp = Yii::$app->operation;
         $userId = Yii::$app->user->id;
 
+        $balance = $comp->getTotalBalance($userId);
+
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
             $offset = $data['offset'];
@@ -45,6 +47,7 @@ class ViewOperationTestAction extends Action
             'newOffset' => self::OFFSET + self::COUNT,
             'count' => self::COUNT,
             'totalOperations' => $totalOperations,
+            'balance' => $balance,
         ]);
     }
 }

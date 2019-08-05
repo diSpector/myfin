@@ -15,6 +15,12 @@ use app\widgets\OperationByDayWidget\OperationByDayWidget;
         <div class="buttons-area-top text-right">
             <?= Html::a('Добавить', ['/operation/create/'], ['class' => 'btn btn-primary']); ?>
         </div>
+        <div class="balance text-right">
+            <?php foreach ($balance as $balanceSource) : ?>
+                <h4>Баланс на "<?=$balanceSource['name']?>": <?= $balanceSource['sum'] ?></h4>
+            <?php endforeach; ?>
+        </div>
+
         <div class="operations-area">
             <?php if (count($operations) !== 0) :  ?>
                 <?php foreach ($operations as $operation) : ?>

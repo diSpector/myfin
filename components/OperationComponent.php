@@ -207,4 +207,24 @@ class OperationComponent extends Component
     {
         return ArrayHelper::index($arr, null, 'date_picked');
     }
+
+    // посчитать текущий баланс по всем источникам
+    public function getTotalBalance($userId){
+        // SELECT sum(CASE when type=1 THEN -sum else sum end) FROM `operations` where `user_id`=15
+        // return Operation::find()
+        // ->select('sum(CASE when type=1 THEN -sum else sum end) balance')
+        // ->andWhere(['user_id' => $userId])
+        // ->groupBy('source_id')
+        // ->asArray()
+        // ->one();
+
+        // SELECT source_id, sum(CASE when type=1 THEN -sum else sum end) FROM `operations` where user_id=15 GROUP BY `source_id`
+        return Operation::find()
+        ->select(['operations.source_id', 's.name', 'sum(CASE when operations.type=1 THEN -sum else sum end) sum'])
+        ->where(['operations.user_id' => $userId])
+        ->joinWith('source s')
+        ->groupBy('source_id')
+        ->asArray()
+        ->all();
+    }
 }

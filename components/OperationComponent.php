@@ -80,11 +80,6 @@ class OperationComponent extends Component
         return ArrayHelper::map(Sources::find()->where(['user_id' => $userId])->all(), 'id', 'name');
     }
 
-    // public function getDefaultCategories()
-    // {
-    //     return DefaultCategory::find()->all();
-    // }
-
     // получить все типы операций (расход, доход)
     public function getOperationTypes()
     {
@@ -109,13 +104,7 @@ class OperationComponent extends Component
     // используется в старом экшене ViewOperationAction, можно удалить
     public function getAllDatesPicked($userId)
     {
-        // return ArrayHelper::index(Operation::find()->select(['category_id', 'source_id', 'sum', 'name', 'date_picked'])->distinct()->where(['user_id' => $userId])->all(), 'date_picked');
         return ArrayHelper::getColumn(Operation::find()->select(['date_picked'])->distinct()->where(['user_id' => $userId])->asArray()->all(), 'date_picked');
-        // return Operation::find()->where(['user_id' => $userId])->asArray()->all();
-        // var_dump(Operation::find()->where(['user_id' => $userId])->asArray()->all());
-        // return ArrayHelper::index(ArrayHelper::map(Operation::find()->select(['id', 'date_picked'])->where(['user_id' => $userId])->all(), 'id', 'date_picked'), 'date_picked');
-        // return ArrayHelper::index(ArrayHelper::map(Operation::find()->select(['id', 'date_picked'])->where(['user_id' => $userId])->all(), 'date_picked', 'id'), null, 'date_picked');
-
     }
 
     public function getOperationsByDate($date)
@@ -142,24 +131,6 @@ class OperationComponent extends Component
             'date_picked'
         );
     }
-
-    // public function getLastOperations($userId, $stopDate, $count = 10)
-    // {
-    //     return ArrayHelper::index(
-    //         Operation::find()
-    //             ->select(['operations.id id', 'operations.name name', 'operations.sum sum', 'operations.type type', 'operations.date_picked', 'c.name cname', 's.name sname'])
-    //             ->where(['operations.user_id' => $userId])
-    //             ->andWhere(['<=', 'date_picked', $stopDate])
-    //             ->joinWith('category c')
-    //             ->joinWith('source s')
-    //             ->orderBy('date_picked desc')
-    //             ->limit($count)
-    //             ->asArray()
-    //             ->all(),
-    //         null,
-    //         'date_picked'
-    //     );
-    // }
 
     public function getLastOperations($userId, $from, $count = 10)
     {
@@ -208,26 +179,20 @@ class OperationComponent extends Component
         return ArrayHelper::index($arr, null, 'date_picked');
     }
 
-    // посчитать текущий баланс по всем источникам
+    // посчитать текущий баланс по ВСЕМ источникам
     public function getTotalBalance($userId){
-        // SELECT sum(CASE when type=1 THEN -sum else sum end) FROM `operations` where `user_id`=15
-        // return Operation::find()
-        // ->select('sum(CASE when type=1 THEN -sum else sum end) balance')
-        // ->andWhere(['user_id' => $userId])
-        // ->groupBy('source_id')
-        // ->asArray()
-        // ->one();
+        // итоговый правильный запрос - left join, чтобы вывести даже те источники, по которым не было движений
+        // SELECT s.name, s.user_id, (ifnull(sum(CASE when o.type=1 THEN -sum else sum end), 0) + s.total) balance FROM `sources` s 
+        // left join operations o on s.id = o.source_id where s.user_id = 15 group by s.name
 
-        // SELECT source_id, sum(CASE when type=1 THEN -sum else sum end) FROM `operations` where user_id=15 GROUP BY `source_id`
-
-        // если по источникам не было операций, сейчас баланс по ним не выводится. TODO - сделать, чтобы выводился баланс по ВСЕМ операциям
-        // SELECT o.source_id, (total + sum(CASE when o.type=1 THEN -sum else sum end)) afterinit, total FROM operations o INNER JOIN sources s on o.source_id = s.id where o.user_id=17 GROUP BY `source_id`
-        return Operation::find()
-        ->select(['operations.source_id', 's.name', 'sum(CASE when operations.type=1 THEN -sum else sum end) sum', 's.total'])
-        ->where(['operations.user_id' => $userId])
-        ->joinWith('source s')
-        ->groupBy('source_id')
+        return Sources::find()
+        ->alias('s')
+        ->select(['s.name', '(ifnull(sum(CASE when o.type=1 THEN -sum else sum end), 0) + s.total) balance'])
+        ->leftJoin('operations o', 's.id = o.source_id')
+        ->where(['s.user_id' => $userId])
+        ->groupBy('s.name')
         ->asArray()
         ->all();
+
     }
 }

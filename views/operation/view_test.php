@@ -17,7 +17,7 @@ use app\widgets\OperationByDayWidget\OperationByDayWidget;
         </div>
         <div class="balance text-right">
             <?php foreach ($balance as $balanceSource) : ?>
-                <h4>Баланс на "<?=$balanceSource['name']?>": <?= $balanceSource['sum'] ?></h4>
+                <h4>Баланс на "<?=$balanceSource['name']?>": <?= $balanceSource['balance'] ?></h4>
             <?php endforeach; ?>
         </div>
 

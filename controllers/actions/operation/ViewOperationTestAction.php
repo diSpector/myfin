@@ -20,8 +20,6 @@ class ViewOperationTestAction extends Action
         $userId = Yii::$app->user->id;
 
         $balance = $comp->getTotalBalance($userId);
-        // var_dump($balance);
-        // exit();
 
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();

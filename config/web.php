@@ -50,9 +50,12 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'category/<action>/<id:\d+>' => 'category/<action>',                
+                'category/<action>/<id:\d+>' => 'category/<action>',
                 'sources/<action>/<id:\d+>' => 'sources/<action>',
                 'operation/<action>/<id:\d+>' => 'operation/<action>',
+                'dashboard/update/<categoryId:\d+>/<date:\d{4}-\d{2}-\d{2}>' => 'dashboard/update',
+                'dashboard/update/<categoryId:\d+>/<dates:\d{4}-\d{2}\-\d{2}_\d{4}-\d{2}\-\d{2}>' => 'dashboard/update',
+
             ],
         ],
 
@@ -70,6 +73,12 @@ $config = [
 
         // компонент типов операций - наличные/беналичные
         'operationType' => app\components\OperationTypeComponent::class,
+
+        // компонент панели - все операции пользователя, сгруппированные за период
+        'dashboard' => app\components\DashboardComponent::class,
+
+        // компонент формы для выбора периода для dashboard 
+        'dateRangeForm' => app\components\DateRangeFormComponent::class,
 
         // авторизация - RBac
         'authManager' => [

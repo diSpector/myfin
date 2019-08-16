@@ -4,56 +4,48 @@ namespace app\controllers\actions\operation;
 
 use Yii;
 use yii\base\Action;
-use ViewOperationTestAction;
 use app\components\OperationComponent;
 
 class ViewOperationAction extends Action
 {
+    const OFFSET = 0;
+    const COUNT = 10;
+
     public function run()
     {
-      /** @var OperationComponent $comp */
+        /** @var OperationComponent $comp */
         $comp = Yii::$app->operation;
         $userId = Yii::$app->user->id;
-        $filterModel = $comp->getOperationSearch();
-        $operations = $comp->getSearchProvider($userId, Yii::$app->request->get());
 
-        
-        
-        $dates = $comp->getAllDatesPicked($userId);
-        // echo "Даты";
-        // var_dump($dates);
+        $balance = $comp->getTotalBalance($userId);
 
-        // получить массив всех операций по дням
-        $operationsArrayByDate = [];
-        foreach($dates as $date=>$value){
-            $operationsArrayByDate[$value] = $comp->getOperationsByDate($value);
-        }
-        // echo "операции";
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+            $offset = $data['offset'];
 
-        // var_dump($operationsArrayByDate);
+            $operations = $comp->getOperations($userId, $offset, self::COUNT);
+            $operationsForView = $comp->reIndexOperations($operations);
 
-        // определяем видимость виджета по наличию у пользователя категорий и источников
-        $categories = $comp->getUserCategories($userId);
-        $sources = $comp->getUserSources($userId);
-        $isVisible = $categories && $sources;
-
-        if(!$isVisible){
-            return $this->controller->render('error');
+            return $this->controller->renderAjax('_loaded-data', [
+                'operations' => $operationsForView,
+                'offset' => $offset + self::COUNT,
+                'count' => self::COUNT,
+            ]);
         }
 
-        // return $this->controller->render('view', [
-        //     'dates' => $dates,
-        //     'dataProvider' => $operations,
-        //     'filterModel' => $filterModel,
-        //     'isVisible' => $isVisible
-        // ]);
+        // общее число операций пользователя - записывается в hiddenInput
+        $totalOperations = $comp->howManyOperations($comp->getOperations($userId));
 
-        return $this->controller->render('view_test', [
-            'dates' => $dates,
-            'dataProvider' => $operations,
-            'filterModel' => $filterModel,
-            'isVisible' => $isVisible,
-            'operationsArrayByDate' => $operationsArrayByDate,
+        // первичная инициализация 
+        $operations = $comp->getOperations($userId, self::OFFSET, self::COUNT);
+        $operationsForView = $comp->reIndexOperations($operations);
+
+        return $this->controller->render('view', [
+            'operations' => $operationsForView,
+            'newOffset' => self::OFFSET + self::COUNT,
+            'count' => self::COUNT,
+            'totalOperations' => $totalOperations,
+            'balance' => $balance,
         ]);
     }
 }

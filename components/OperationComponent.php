@@ -101,12 +101,6 @@ class OperationComponent extends Component
         return $query;
     }
 
-    // используется в старом экшене ViewOperationAction, можно удалить
-    public function getAllDatesPicked($userId)
-    {
-        return ArrayHelper::getColumn(Operation::find()->select(['date_picked'])->distinct()->where(['user_id' => $userId])->asArray()->all(), 'date_picked');
-    }
-
     public function getOperationsByDate($date)
     {
         return Operation::find()->where(['date_picked' => $date])->asArray()->all();
@@ -160,7 +154,7 @@ class OperationComponent extends Component
             ->where(['operations.user_id' => $userId])
             ->joinWith('category c')
             ->joinWith('source s')
-            ->orderBy('date_picked desc')
+            ->orderBy('date_picked desc, id desc')
             ->limit($count)
             ->offset($from)
             ->asArray()

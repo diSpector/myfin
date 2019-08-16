@@ -38,6 +38,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
+            ['label' => 'Dashboard', 'url' => ['/dashboard/view']],
             ['label' => 'Категории', 'url' => ['/category/view']],
             ['label' => 'Источники', 'url' => ['/sources/view']],
             ['label' => 'Операции', 'url' => ['/operation/view']],

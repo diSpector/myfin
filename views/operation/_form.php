@@ -16,9 +16,12 @@ use yii\widgets\ActiveForm;
 <?= $form->field($model, 'sum'); ?>
 <?= $form->field($model, 'name'); ?>
 <?= $form->field($model, 'source_id')->dropDownList($sources, ['prompt' => 'Выберите источник']); ?>
+<i>Нет нужного источника? <?= Html::a('Добавить', ['sources/create'], ['class' => 'profile-link']) ?></i><br><br>
 <?= $form->field($model, 'category_id')->dropDownList($categories, [
     'prompt' => 'Выберите категорию',
 ]); ?>
+<i>Нет нужной категории? <?= Html::a('Добавить', ['category/create'], ['class' => 'profile-link']) ?></i><br><br>
+
 <?= $form->field($model, 'date_picked')->widget(\yii\jui\DatePicker::class, [
     'language' => 'ru',
     'dateFormat' => 'yyyy-MM-dd',

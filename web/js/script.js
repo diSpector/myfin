@@ -50,6 +50,11 @@ $(document).ready(function () {
         window.document.location = $(this).data("href");
     });
 
+    // обработка клика на строку в таблице отчетов (dashboard)
+    $('.dashboard-area').on('click', '.table-row', function () {
+        window.document.location = $(this).data("href");
+    });
+
     // обработка нажатия на кнопку "Загрузить еще" (операции)
     $('.buttons-load-more .btn').click(function (event) {
 
@@ -59,7 +64,7 @@ $(document).ready(function () {
         var total = Number(attrs.attr('data-total'));
         var count = Number(attrs.attr('data-count'));
 
-        if(total <= offset + count){
+        if (total <= offset + count) {
             $('.buttons-load-more').hide();
         }
 

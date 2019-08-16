@@ -2,138 +2,48 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\ListView;
 use yii\helpers\ArrayHelper;
 use app\models\OperationForm;
 use app\models\OperationType;
-
+use app\widgets\OperationByDayWidget\OperationByDayWidget;
 ?>
 
 <div class="row">
-
-    <?php if ($dataProvider->getTotalCount() !== 0) :  ?>
-        <div class="col-md-12">
-            <h1>Операции</h1>
-
-            <?php // var_dump($dates); ?>
-
-            <?= Html::a('Сбросить фильтры', '/operation/view'); ?>
-            <?= GridView::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $filterModel,
-                // 'showOnEmpty' => false,
-                'columns' => [
-                    ['class' => 'yii\grid\SerialColumn'],
-                    [
-                        'label' => 'Дата',
-                        'attribute' => 'date_picked',
-                        'value' => function($model){
-                            $dateTime = new DateTime($model->date_picked);
-                            return $dateTime->format('d-m-Y');
-                            // return date('Y:m:d', $model->date_picked);
-                            // return $model->date_picked;
-
-                        }
-                    ],
-                    [
-                        'label' => 'Сумма',
-                        'attribute' => 'sum'
-                    ],
-                    [
-                        'label' => 'Описание',
-                        'attribute' => 'name'
-                    ],
-                    [
-                        'label' => 'Категория',
-                        'attribute' => 'category_id',
-                        // 'attribute' => 'category.name'
-                        'value' => function ($model) {
-                            return $model->category->name;
-                        }
-                    ],
-                    [
-                        'label' => 'Источник',
-                        'attribute' => 'source_id',
-                        // 'attribute' => 'source.name'
-                        'value' => function ($model) {
-                            return $model->source->name;
-                        }
-
-                    ],
-//                    [
-//                        'attribute' => 'operation_type',
-//                        'filter' => ArrayHelper::map(OperationType::find()->asArray()->all(), 'id', 'name'),
-//                        'value' => function ($data) {
-//                            return $data->source->type == 1 ? 'Безналичный' : 'Наличный';
-//                        }
-//                    ],
-                    [
-                        'attribute' => 'type',
-                        'contentOptions' => function ($data, $key, $index, $column) {
-                            return ['style' => 'color:'
-                                . ($data->type == 1 ? 'red' : 'blue')];
-                        },
-                        'filter' => ArrayHelper::map(OperationForm::find()->asArray()->all(), 'id', 'name'),
-                        'value' => function ($data) {
-                            return $data->type == 1 ? 'Расход' : 'Приход';
-                        }
-                    ],
-                    [
-                        'header' => 'Действие',
-                        'class' => 'yii\grid\ActionColumn',
-                        // 'buttons' => [
-                        //     'delete' => function ($url, $model, $key) {
-                        //         return Html::a('Удалить', ['/operation/delete/'], [
-                        //             'class' => 'btn btn-danger',
-                        //             'data-confirm' => 'Вы уверены, что хотите удалить эту категорию?',
-                        //             'data-method' => 'post',
-                        //             'data-params' => [
-                        //                 'id' => $model->id,
-                        //             ],
-                        //         ]);
-                        //     },
-                        //     'update' => function ($url, $model, $key) {
-                        //         $customUrl = '/operation/update/' . $model->id;
-                        //         return Html::a('Изменить', $customUrl, [
-                        //             'title' => Yii::t('yii', 'Изменить'),
-                        //             'data-method' => 'post',
-                        //             'class' => 'btn btn-primary',
-                        //         ]);
-                        //     },
-                        // ],
-                        'buttons' => [
-                            'delete' => function ($url, $model, $key) {
-                                return Html::a('<span class="glyphicon glyphicon-ban-circle"></span>', ['/operation/delete/'], [
-                                    // 'class' => 'btn btn-danger',
-                                    'data-confirm' => 'Вы уверены, что хотите удалить эту категорию?',
-                                    'data-method' => 'post',
-                                    'data-params' => [
-                                        'id' => $model->id,
-                                    ],
-                                ]);
-                            },
-                        ],
-                        'template' => '{update} {delete}',
-                    ],
-                ]
-            ]); ?>
-        <?php else : ?>
-            <div class="col-md-offset-2 col-md-8">
-                <h1>Операции</h1>
-                <h4>Операций нет</h4>
-              <?php if (Yii::$app->request->queryParams): ?>
-                <?= Html::a('Сбросить фильтры', '/operation/view'); ?>
-                <br>
-              <?php endif; ?>
-            <?php endif; ?>
+    <div class="col-md-12">
+        <h1 class='text-center'>Операции</h1>
+        <div class="buttons-area-top text-right">
             <?= Html::a('Добавить', ['/operation/create/'], ['class' => 'btn btn-primary']); ?>
-            <br>
-            <br>
-            <?= Html::a('На Главную', ['/site/index'], ['class' => 'badge badge-light']) ?>
-
+        </div>
+        <div class="balance text-right">
+            <?php foreach ($balance as $balanceSource) : ?>
+                <h4>Баланс на "<?=$balanceSource['name']?>": <?= $balanceSource['balance'] ?></h4>
+            <?php endforeach; ?>
         </div>
 
+        <div class="operations-area">
+            <?php if (count($operations) !== 0) :  ?>
+                <?php foreach ($operations as $date => $operationBlock) : ?>
+                    <?= OperationByDayWidget::widget(['title' => $date, 'model' => $operationBlock]) ?>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <h4 class="text-center">Операций нет</h4>
+                <?php if (Yii::$app->request->queryParams) : ?>
+                    <?= Html::a('Сбросить фильтры', '/operation/view'); ?>
+                    <br>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <?php if ($newOffset < $totalOperations) : ?>
+            <div class="buttons-load-more text-center">
+                <?= Html::tag('p', 'Загрузить еще', ['class' => 'btn btn-success']) ?>
+                <?= Html::hiddenInput('attrs', '', ['data-count' => $count, 'data-total' => $totalOperations, 'data-offset' => $newOffset]); ?>
+            </div>
+        <?php endif; ?>
+        <br>
+        <br>
+        <div class="buttons-area-bottom text-center">
+            <?= Html::a('На Главную', ['/site/index'], ['class' => 'badge badge-light']) ?>
+        </div>
     </div>
-
-
-</div>
 </div>

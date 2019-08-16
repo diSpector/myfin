@@ -1,14 +1,15 @@
 <?php
 
-namespace app\widgets\OperationByDayWidget;
+namespace app\widgets\DashboardForPeriodWidget;
 
 use yii\base\Widget;
 use yii\helpers\Html;
 
-class OperationByDayWidget extends Widget
+class DashboardForPeriodWidget extends Widget
 {
     public $model;
     public $title;
+
 
     public function init()
     {

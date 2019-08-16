@@ -5,6 +5,6 @@ use app\widgets\OperationByDayWidget\OperationByDayWidget;
 
 ?>
 
-<?php foreach ($operations as $operation) : ?>
-    <?= OperationByDayWidget::widget(['model' => $operation]) ?>
+<?php foreach ($operations as $date => $operationBlock) : ?>
+    <?= OperationByDayWidget::widget(['title' => $date, 'model' => $operationBlock]) ?>
 <?php endforeach; ?>

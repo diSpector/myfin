@@ -27,9 +27,11 @@ class CreateOperationAction extends Action
     $sources = $comp->getUserSources($userId);
     $isVisible = $categories && $sources;
 
-    if (!$isVisible) {
-      $this->controller->redirect('view');
-    }
+    // if (!$isVisible) {
+    //   Yii::$app->session->setFlash('error', 'Чтобы добавлять операции, нужно добавить хотя бы 1 источник платежей (карту, кошелек) и 1 категорию расходов или доходов');
+    //   return $this->controller->redirect('view');
+
+    // }
 
     if (Yii::$app->request->isAjax) {
       // получить тип операции - расход, приход

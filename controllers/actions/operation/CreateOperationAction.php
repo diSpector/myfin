@@ -18,6 +18,11 @@ class CreateOperationAction extends Action
     //    $types = $comp->getOperationTypes();
     $types = $comp->getOperationTypesForUser($userId);
 
+    // TODO - заготовка для перекидывания 
+    // $types[] = 'Перенос средств с одного счета на другой';
+
+
+
     $model = $comp->getModel();
 
     //     $categories = $comp->getSearchProvider($userId, Yii::$app->request->get());

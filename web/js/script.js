@@ -16,7 +16,8 @@ $(document).ready(function () {
             id: operationId,
         };
         $.ajax({
-            url: '/operation/create',
+            // url: '/operation/create',
+            url: '/operation/create_test',
             type: 'post',
             dataType: 'html',
             data: operation,
@@ -50,11 +51,6 @@ $(document).ready(function () {
         window.document.location = $(this).data("href");
     });
 
-    // обработка клика на строку в таблице отчетов (dashboard)
-    $('.dashboard-area').on('click', '.table-row', function () {
-        window.document.location = $(this).data("href");
-    });
-
     // обработка нажатия на кнопку "Загрузить еще" (операции)
     $('.buttons-load-more .btn').click(function (event) {
 
@@ -84,6 +80,67 @@ $(document).ready(function () {
                 $('.loading').hide();
                 $('.operations-area').append(data);
                 attrs.attr('data-offset', offset + count);
+            },
+        });
+    });
+
+    // обработка формы выбора периода операций
+    $(document).on("beforeSubmit", "#operation-daterange-form", function () {
+        var dates = $(".kv-drp-dropdown .range-value").val();
+
+        $.ajax({
+            url: '/operation/index',
+            type: 'post',
+            dataType: 'html',
+            data: {
+                dates: dates,
+            },
+
+            cache: false,
+            beforeSend: function () {
+                // $('.dashboard-area').append("<div class = 'loading'><img src='/img/load.gif' /></div>").show();
+                $('.operations-area').addClass("block-is-loading");
+
+            },
+            success: function (data) {
+                // $('.loading').hide();
+                $('.operations-area').removeClass("block-is-loading");
+                $('.operations-area').html(data);
+                $('.buttons-load-more').hide();
+            },
+        });
+        return false; 
+    });
+
+    // обработка клика на строку в таблице отчетов (dashboard)
+    $('.dashboard-area').on('click', '.table-row', function () {
+        window.document.location = $(this).data("href");
+    });
+
+    // обработка нажатия на кнопку "Показать" в Dashboard
+    $('.dashboard-ajax-buttons .btn').click(function (event) {
+        var dates = $(".kv-drp-dropdown .range-value").val();
+        var period = $("select[name='period']").val();
+
+        $.ajax({
+            url: '/dashboard/view_test',
+            type: 'post',
+            dataType: 'html',
+            data: {
+                dates: dates,
+                period: period,
+            },
+
+            cache: false,
+            beforeSend: function () {
+                // $('.dashboard-area').append("<div class = 'loading'><img src='/img/load.gif' /></div>").show();
+                $('.dashboard-area').addClass("block-is-loading");
+
+            },
+            success: function (data) {
+                // $('.loading').hide();
+                $('.dashboard-area').removeClass("block-is-loading");
+                $('.dashboard-area').html(data);
             },
         });
     });

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+
 use yii\helpers\ArrayHelper;
 use app\widgets\DashboardForPeriodWidget\DashboardForPeriodWidget;
 use kartik\daterange\DateRangePicker;
@@ -21,12 +22,9 @@ use yii\widgets\ActiveForm;
 
 <div class="row">
     <div class="col-md-4 col-md-offset-8">
-        <!-- <h4 class="text-right"><label class="control-label">Выберите период:</label></h4> -->
-        <?php $form = ActiveForm::begin(); ?>
+        <label class="control-label">Выберите период</label>
         <div class="drp-container">
-            <?php echo $form->field($formRangeModel, 'dateRange', [
-                'options' => ['class' => 'drp-container form-group']
-            ])->widget(DateRangePicker::classname(), [
+            <?= DateRangePicker::widget([
                 'name' => 'date_range_2',
                 'presetDropdown' => true,
                 'hideInput' => true,
@@ -40,19 +38,34 @@ use yii\widgets\ActiveForm;
                 ]
             ]);
             ?>
-        </div>
-        <?= $form->field($formRangeModel, 'period')->dropDownList([
-            '0' => 'Итого',
-            '1' => 'За каждый день',
-        ]); ?>
 
-        <div class="col-lg-12">
-            <?= Html::submitButton('Показать', ['class' => 'btn btn-primary']) ?>
         </div>
-        <?php $form->end(); ?>
+        <br>
+
+        <label class="control-label">Способ</label>
+        <div class="form-group">
+            <?= Html::dropDownList(
+                'period',
+                null,
+                [
+                    0 => 'Итого',
+                    1 => 'За каждый день',
+                ],
+                ['class' => 'form-control']
+
+            ); ?>
+        </div>
+
+        <div class="dashboard-ajax-buttons">
+            <?= Html::tag('p', 'Показать', ['class' => 'btn btn-primary']) ?>
+        </div>
+
+
     </div>
 </div>
-<br><br>
+
+<br>
+<br>
 
 <div class="row">
     <div class="col-md-12">

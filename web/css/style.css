@@ -14,3 +14,11 @@
 .table{
     table-layout: fixed;
 }
+
+.block-is-loading{
+    opacity: 0.5;
+}
+
+.error-request{
+    color: red;
+}

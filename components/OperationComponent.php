@@ -29,11 +29,31 @@ class OperationComponent extends Component
     {
         $model->user_id = Yii::$app->user->id;
 
-        if (!$model->save()) {
-            return false;
+        switch ($model->type){
+            case '3': // если 3, то сохранить как "переброс между счетами"
+            if (!$this->createTransferOperation($model)){
+                return false;
+            }
+            break;
+            default: // иначе - просто сохранить операцию
+            if (!$model->save()){
+                return false;
+            }
+            break;
         }
 
+        // if (!$model->save()) {
+        //     return false;
+        // }
+
         return true;
+    }
+
+    public function createTransferOperation(&$model)
+    {
+        var_dump($model->attributes);
+        echo $model->source_id2;
+        exit;
     }
 
     public function updateOperation(&$model)
@@ -159,6 +179,23 @@ class OperationComponent extends Component
             ->offset($from)
             ->asArray()
             ->all();
+    }
+
+    // получить все операции за период
+    public function getOperationsForPeriod($userId, $datesArr, $from = '', $count = '')
+    {
+        return Operation::find()
+        ->select(['operations.id id', 'operations.name name', 'operations.sum sum', 'operations.type type', 'operations.date_picked', 'c.name cname', 's.name sname'])
+        ->where(['operations.user_id' => $userId])
+        ->joinWith('category c')
+        ->joinWith('source s')
+        ->orderBy('date_picked desc, id desc')
+        ->andWhere(['between', 'date_picked', $datesArr[0], $datesArr[1]])
+        ->limit($count)
+        ->offset($from)
+        ->asArray()
+        ->all();
+
     }
 
     // посчитать количество операций

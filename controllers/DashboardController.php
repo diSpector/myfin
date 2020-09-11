@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\base\BaseController;
 use app\controllers\actions\dashboard\ViewDashboardAction;
 use app\controllers\actions\dashboard\UpdateDashboardAction;
+use app\controllers\actions\dashboard\ViewTestDashboardAction;
 
 class DashboardController extends BaseController
 {
@@ -13,7 +14,7 @@ class DashboardController extends BaseController
         return [
             'view' => ViewDashboardAction::class,
             'update' => UpdateDashboardAction::class,
-            
+            'view_test' => ViewTestDashboardAction::class,
         ];
     }
 }
